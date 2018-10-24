@@ -1,3 +1,3 @@
 James Gallicchio (@JamesGallicchio)
 Jessica Levin (@jess10172)
-Victoriaa Nelson (@victoriamazin)
+Victoria Nelson (@victoriamazin)
