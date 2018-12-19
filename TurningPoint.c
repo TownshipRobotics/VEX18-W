@@ -10,6 +10,7 @@ int modify2(int input){
 	return (input+(pow(input,5)/8192-pow(input,3))/8192)/2;
 }
 
+//moves the 4 motors controlling the 4 wheels using the signals from the right joystick
 void updateWheels(){
 
 }
