@@ -10,9 +10,12 @@ int modify2(int input){
 	return (input+(pow(input,5)/8192-pow(input,3))/8192)/2;
 }
 
-//moves the 4 motors controlling the 4 wheels using the signals from the right joystick
+//moves the 4 motors controlling the 4 wheels using the signals from the right and left joystick
 void updateWheels(){
-
+	motor[leftFrontWheel] = modify2(vexRT[Ch3]);
+	motor[leftBackWheel] = modify2(vexRT[Ch3]);
+	motor[rightFrontWheel] = modify2(vexRT[Ch2]);
+	motor[rightBackWheel] = modify2(vexRT[Ch2]);
 }
 
 task main()
