@@ -1,3 +1,7 @@
+#pragma config(Motor,  port2,           launcherLB,    tmotorVex393_MC29, openLoop)
+#pragma config(Motor,  port3,           launcherLT,    tmotorVex393_MC29, openLoop)
+#pragma config(Motor,  port4,           launcherRB,    tmotorVex393_MC29, openLoop)
+#pragma config(Motor,  port5,           launcherRT,    tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port6,           leftFrontWheel, tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port7,           leftBackWheel, tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port8,           rightFrontWheel, tmotorVex393_MC29, openLoop)
@@ -18,10 +22,28 @@ void updateWheels(){
 	motor[rightBackWheel] = modify2(vexRT[Ch2]);
 }
 
+//its a mess and i hate it but its something i guess. feel free to completely change it programming team
+//if 8r button is pressed activate launching mechanism
+void updateLauncher(){
+	if(vexRT[Btn8R] == 1){
+		motor[launcherLT] = -127;
+		motor[launcherLB] = 127;
+		motor[launcherRT] = 127;
+		motor[launcherRB] = -127;
+	}
+	else{
+		motor[launcherLT] = 0;
+		motor[launcherLB] = 0;
+		motor[launcherRT] = 0;
+		motor[launcherRB] = 0;
+	}
+}
+
 task main()
 {
 	while(true){
 		updateWheels();
+		updateLauncher();
 	}
 
 }
