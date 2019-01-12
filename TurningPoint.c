@@ -24,9 +24,9 @@ void updateWheels(){
 //gradual 30-65-95-127
 void updateLauncherJess(){
 	//when the button is being pressed
-	while(vexRT[Btn8u]==1){
-		//so speed isn’t local and thrown away
-		Int speed=0;
+	while(vexRT[Btn8U]==1){
+		//so speed isnt local and thrown away
+		int speed=0;
 		//once speed reaches 127 leaves loop and stays
 		for(speed=37; speed <=127; speed+= 30){
 			motor[launcherLB]= - (speed);
@@ -81,11 +81,11 @@ void updateLauncherExponential{
 			//starts at 21 and accelerates to 163
 			for(float x = 3.1; x <= 5.1; x+=.4){
 				//right top and left bottom motors turn clockwise
-				motor[launcherRT] = pow(e,x)-1;
-				motor[launcherLB] = pow(e,x)-1;
+				motor[launcherRT] = pow(2.71828,x)-1;
+				motor[launcherLB] = pow(2.71828,x)-1;
 				//left top and right bottom turn counterclockwise
-				motor[launcherLT] = -pow(e,x)-1;
-				motor[launcherRB] = -pow(e,x)-1;
+				motor[launcherLT] = -pow(2.71828,x)-1;
+				motor[launcherRB] = -pow(2.71828,x)-1;
 				//waits 20 milliseconds
 				waitInMilliseconds(20);
 			}
