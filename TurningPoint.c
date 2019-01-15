@@ -10,16 +10,16 @@
 
 //it needed to be faster so i made a slight alteration
 //https://www.desmos.com/calculator/xv2hbpabjm
-int modify2(int input){
+int modJoystick(int input){
 	return (input+(pow(input,5)/8192-pow(input,3))/8192)/2;
 }
 
 //moves the 4 motors controlling the 4 wheels using the signals from the right and left joystick
 void updateWheels(){
-	motor[leftFrontWheel] = modify2(vexRT[Ch3]);
-	motor[leftBackWheel] = modify2(vexRT[Ch3]);
-	motor[rightFrontWheel] = modify2(vexRT[Ch2]);
-	motor[rightBackWheel] = modify2(vexRT[Ch2]);
+	motor[leftFrontWheel] = modJoystick(vexRT[Ch3]);
+	motor[leftBackWheel] = modJoystick(vexRT[Ch3]);
+	motor[rightFrontWheel] = modJoystick(vexRT[Ch2]);
+	motor[rightBackWheel] = modJoystick(vexRT[Ch2]);
 }
 
 //its a mess and i hate it but its something i guess. feel free to completely change it programming team
