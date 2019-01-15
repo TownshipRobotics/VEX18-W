@@ -72,7 +72,7 @@ void updateLauncherCait(){
 //caitlin obrien
 //speed = (e^x)-1 from x= 3.1 to x = 5.1
 //should take 100ms
-void updateLauncherExponential{
+void updateLauncherExponential(){
 	//if button 8D is pressed
 	if(vexRT[Btn8D] == 1){
 		//if the launcher is off, turn on
