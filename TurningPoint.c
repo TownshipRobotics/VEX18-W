@@ -17,23 +17,32 @@ int modify2(int input){
 	return (input+(pow(input,5)/8192-pow(input,3))/8192)/2;
 }
 
+// Sets launcher to a given speed
+// Left bottom & right top turn clockwise, others counterclockwise
+void setLauncherSpeed(int speed){
+	motor[launcherLB] = speed;
+	motor[launcherRT] = speed;
+	motor[launcherRB] = -(speed);
+	motor[launcherLT] = -(speed);
+}
+
 void updateWheels(){
 
 }
 
-//gradual 30-65-95-127
+//gradual 37-67-97-127
+//takes 124ms
 void updateLauncherJess(){
-	//when the button is being pressed
-	while(vexRT[Btn8U]==1){
-		//so speed isnt local and thrown away
-		int speed=0;
-		//once speed reaches 127 leaves loop and stays
-		for(speed=37; speed <=127; speed+= 30){
-			motor[launcherLB]= - (speed);
-			motor[launcherLT]= - (speed);
-			motor[launcherRB]=speed;
-			motor[launcherRT]=speed;
-			waitInMilliseconds(31.25);
+	//if the button is being pressed
+	if(vexRT[Btn8U] == 1){
+		if(launcherOff){
+			//once speed reaches 127 leaves loop and stays
+			for(int speed = 37; speed <= 127; speed += 30){
+				setLauncherSpeed(speed);
+				sleep(31);
+			}
+		} else { // if launcher is on, turn off
+			setLauncherSpeed(0);
 		}
 	}
 }
@@ -41,7 +50,7 @@ void updateLauncherJess(){
 //61-84-105-127
 //starts larger, smaller increments
 //speed = 22x+61 from
-//should take 1 decisecond
+//should take 100ms
 void updateLauncherCait(){
 	//if button 8R is pressed
 	if(vexRT[Btn8R] == 1){
@@ -49,22 +58,12 @@ void updateLauncherCait(){
 		if(launcherOff){
 			//starts at 61 and accelerates to 127
 			for(int x = 0; x <= 3; x++){
-				//right top and left bottom motors turn clockwise
-				motor[launcherLB] = 22*x+61;
-				motor[launcherRT] = 22*x+61;
-				//left top and right bottom turn counterclockwise
-				motor[launcherRB] = -22*x-61;
-				motor[launcherLT] = -22*x-61;
+				setLauncherSpeed(22*x+61);
 				//wait 25 milliseconds
-				waitInMilliseconds(25);
+				sleep(25);
 			}
-		}
-		//if launcher is on, turn off
-		else{
-			motor[launcherLB] = 0;
-			motor[launcherRB] = 0;
-			motor[launcherLT] = 0;
-			motor[launcherRT] = 0;
+		} else { //if launcher is on, turn off
+			setLauncherSpeed(0);
 		}
 	}
 }
@@ -72,7 +71,7 @@ void updateLauncherCait(){
 //exponentially increases the launcher speed
 //caitlin obrien
 //speed = (e^x)-1 from x= 3.1 to x = 5.1
-//should take 1 decisecond
+//should take 100ms
 void updateLauncherExponential{
 	//if button 8D is pressed
 	if(vexRT[Btn8D] == 1){
@@ -80,22 +79,14 @@ void updateLauncherExponential{
 		if(launcherOff){
 			//starts at 21 and accelerates to 163
 			for(float x = 3.1; x <= 5.1; x+=.4){
-				//right top and left bottom motors turn clockwise
-				motor[launcherRT] = pow(2.71828,x)-1;
-				motor[launcherLB] = pow(2.71828,x)-1;
-				//left top and right bottom turn counterclockwise
-				motor[launcherLT] = -pow(2.71828,x)-1;
-				motor[launcherRB] = -pow(2.71828,x)-1;
+				setLauncherSpeed(exp(x)-1);
 				//waits 20 milliseconds
-				waitInMilliseconds(20);
+				sleep(20);
 			}
 		}
 		//if the launcher is on, turn off motors
 		else{
-			motor[launcherLB] = 0;
-			motor[launcherRB] = 0;
-			motor[launcherLT] = 0;
-			motor[launcherRT] = 0;
+			setLauncherSpeed(0);
 		}
 	}
 }
