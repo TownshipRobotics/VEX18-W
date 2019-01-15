@@ -36,12 +36,14 @@ void updateLauncherJess(){
 	//if the button is being pressed
 	if(vexRT[Btn8U] == 1){
 		if(launcherOff){
+			launcherOff = false;
 			//once speed reaches 127 leaves loop and stays
 			for(int speed = 37; speed <= 127; speed += 30){
 				setLauncherSpeed(speed);
 				sleep(31);
 			}
 		} else { // if launcher is on, turn off
+			launcherOff = true;
 			setLauncherSpeed(0);
 		}
 	}
@@ -56,6 +58,7 @@ void updateLauncherCait(){
 	if(vexRT[Btn8R] == 1){
 		//if launcher is off, turn on
 		if(launcherOff){
+			launcherOff = false;
 			//starts at 61 and accelerates to 127
 			for(int x = 0; x <= 3; x++){
 				setLauncherSpeed(22*x+61);
@@ -63,6 +66,7 @@ void updateLauncherCait(){
 				sleep(25);
 			}
 		} else { //if launcher is on, turn off
+			launcherOff = true;
 			setLauncherSpeed(0);
 		}
 	}
@@ -77,6 +81,7 @@ void updateLauncherExponential(){
 	if(vexRT[Btn8D] == 1){
 		//if the launcher is off, turn on
 		if(launcherOff){
+			launcherOff = false;
 			//starts at 21 and accelerates to 163
 			for(float x = 3.1; x <= 5.1; x+=.4){
 				setLauncherSpeed(exp(x)-1);
@@ -86,6 +91,7 @@ void updateLauncherExponential(){
 		}
 		//if the launcher is on, turn off motors
 		else{
+			launcherOff = true;
 			setLauncherSpeed(0);
 		}
 	}
