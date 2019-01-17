@@ -21,8 +21,8 @@ int modJoystick(int input){
 void updateWheels(){
 	motor[leftFrontWheel] = modJoystick(vexRT[Ch3]);
 	motor[leftBackWheel] = modJoystick(vexRT[Ch3]);
-	motor[rightFrontWheel] = modJoystick(vexRT[Ch2]);
-	motor[rightBackWheel] = modJoystick(vexRT[Ch2]);
+	motor[rightFrontWheel] = -(modJoystick(vexRT[Ch2]));
+	motor[rightBackWheel] = -(modJoystick(vexRT[Ch2]));
 }
 
 // Sets launcher to a given speed
