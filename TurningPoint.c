@@ -127,11 +127,8 @@ void testConveyor(){
 		if(intakeOff){
 			intakeOff = false;
 			motor[conveyor] = 60;
-			sleep(60000);
-			motor[conveyor] = 30;
-			sleep(60000);
 		} else{
-			intakeOff = true
+			intakeOff = true;
 			motor[conveyor] = 0;
 		}
 	}
@@ -147,4 +144,7 @@ task main()
 		updateIntake();
 	}
 
+	//while(true){
+		//testConveyor();
+	//}
 }
