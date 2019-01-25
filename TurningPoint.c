@@ -38,8 +38,6 @@ task updateWheels(){
 //**********    LAUNCHER    **********
 //************************************
 
-bool launcherOff = true;
-
 // Sets launcher to a given speed
 // Left bottom & right top turn clockwise, others counterclockwise
 void setLauncherSpeed(int speed){
@@ -87,24 +85,28 @@ void accLauncherExp(){
 // Press 8L to turn it off
 task updateLauncher(){
 	while (true) {
+
+		// If 8U pressed, do Jess's launcher & wait for the button to be released
 		if (vexRT[Btn8U] == 1){
 			accLauncherJess();
 			waitUntil(vexRT[Btn8U] == 0);
 
+		// If 8R is pressed, do Cait's launcher & wait for the button to be released
 		} else if (vexRT[Btn8R] == 1){
 			accLauncherCait();
 			waitUntil(vexRT[Btn8R] == 0);
 
+		// If 8D is pressed, do Cait's launcher & wait for the button to be released
 		} else if (vexRT[Btn8D] == 1){
 			accLauncherExp();
 			waitUntil(vexRT[Btn8D] == 0);
 
-		} else if (vexRT[Btn8L] == 1){
-			setLauncherSpeed(0);
-
+		// Otherwise make sure launcher speed is 0
 		} else {
+			setLauncherSpeed(0);
 			sleep(10);
 		}
+
 	}
 }
 
@@ -113,25 +115,27 @@ task updateLauncher(){
 //**********     INTAKE     **********
 //************************************
 
-void setIntakeSpeed(int speed){
-	motor[intake] = -speed;
-	motor[conveyor] = speed;
-}
-
 bool intakeOff = true;
 
 task updateIntake(){
 	while(true) {
+
 		// Check if button is pressed
 		if (vexRT[Btn7L] == 1){
 			if (intakeOff) {
 				// Turn intake on
 				intakeOff = false;
-				setIntakeSpeed(60);
+
+				motor[intake] = -60;
+				motor[conveyor] = 60;
+
 			} else {
 				// Turn intake off
 				intakeOff = true;
-				setIntakeSpeed(0);
+
+				motor[intake] = 0;
+				motor[conveyor] = 0;
+
 			}
 
 			// Wait for button to be released
@@ -144,28 +148,9 @@ task updateIntake(){
 }
 
 
-//************************************
-//**********    CONVEYOR    **********
-//************************************
-
-task testConveyor(){
-	if(vexRT[Btn7U] == 1){
-		if(intakeOff){
-			intakeOff = false;
-			motor[conveyor] = 60;
-			sleep(60000);
-			motor[conveyor] = 30;
-			sleep(60000);
-		} else{
-			intakeOff = true;
-			motor[conveyor] = 0;
-		}
-	}
-}
-
 
 //************************************
-//**********     TASKS      **********
+//**********     MAIN       **********
 //************************************
 
 task main()
