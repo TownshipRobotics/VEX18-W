@@ -79,7 +79,6 @@ void accLauncherExp(){
 }
 
 // Press 8U for Jess's, 8R for Cait's, 8D for Exponential
-// Press 8L to turn it off
 task updateLauncher(){
 		// If 8U pressed, do Jess's launcher & wait for the button to be released
 		if (vexRT[Btn8U] == 1){
