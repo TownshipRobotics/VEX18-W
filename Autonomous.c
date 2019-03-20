@@ -65,7 +65,7 @@ void moveForward(float tiles,int leftSpeed,int rightSpeed){
 	resetMotorEncoder(rightBackWheel);
 	setLeftWheels(leftSpeed);
 	setRightWheels(rightSpeed);
-	waitUntil(getMotorEncoder(rightBackWheel) >= 2000);
+	waitUntil(getMotorEncoder(rightBackWheel) >= 2100);
 	setWheelSpeed(0);
 }
 
@@ -73,7 +73,7 @@ void moveBackward(float tiles,int leftSpeed,int rightSpeed){
 	resetMotorEncoder(rightBackWheel);
 	setLeftWheels(leftSpeed);
 	setRightWheels(rightSpeed);
-	waitUntil(getMotorEncoder(rightBackWheel) <= -2000);
+	waitUntil(getMotorEncoder(rightBackWheel) <= -2100);
 	setWheelSpeed(0);
 }
 
@@ -92,11 +92,11 @@ void autonomousLauncher(){
 
 	//******** MOVE FORWARD ********
 	//move forward 1.5 tiles and stop
-	moveForward(1.5,60,65);
+	moveForward(1.5,60,60);
 
 	//******** MOVE BACKWARD ********
 	//move backward 24 inches and stop
-	moveBackward(1.5,-60,-65);
+	moveBackward(1.5,-60,-60);
 }
 
 void turnRightAndPark(){
@@ -118,6 +118,7 @@ void display(){
 	displayLCDCenteredString(0, distance);
 	sprintf(rotation, "%d", getMotorEncoder(rightBackWheel));
 	displayLCDCenteredString(1, rotation);
+	bLCDBacklight = true;
 }
 
 task main()
