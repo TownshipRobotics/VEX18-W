@@ -84,8 +84,8 @@ void autonomousLauncher(){
 	//wait 1 second
 	sleep(1000);
 	//move up conveyor belt
-	setConveyorSpeed(30);
-	sleep(1500);
+	setConveyorSpeed(-50);
+	sleep(2500);
 	//stop launcher and conveyor belt
 	setLauncherSpeed(0);
 	setConveyorSpeed(0);
