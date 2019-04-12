@@ -65,8 +65,6 @@ void pre_auton()
 /*  You must modify the code to add your own robot specific commands here.   */
 /*---------------------------------------------------------------------------*/
 
-bool red = true; //are we on the red team?
-
 // Sets launcher to a given speed
 // Left bottom & right top turn clockwise, others counterclockwise
 void setLauncherSpeed(int speed){
@@ -83,12 +81,6 @@ void launchOn(){
 		setLauncherSpeed(speed);
 		sleep(31);
 	}
-
-	//wait until ball is shot
-	//sleep(time);
-
-	//stop
-	//setLauncherSpeed(0);
 }
 
 //sets the speed of the wheels to the variable specified
@@ -99,124 +91,91 @@ void stopWheels(){
 	motor[rightFrontWheel] = 0;
 }
 
-//moves robot forward
-void moveForward(int time){
-	motor[leftBackWheel] = 60;
-	motor[leftFrontWheel] = 60;
-	motor[rightBackWheel] = 60;
-	motor[rightFrontWheel] = 60;
-	sleep(time);
-	stopWheels();
+void setWheelSpeed(int speed){
+	motor[leftBackWheel] = speed;
+	motor[leftFrontWheel] = speed;
+	motor[rightBackWheel] = speed;
+	motor[rightFrontWheel] = speed;
 }
 
-//moves robot backward
-void moveBackward(int time){
-	motor[leftBackWheel] = -60;
-	motor[leftFrontWheel] = -60;
-	motor[rightBackWheel] = -60;
-	motor[rightFrontWheel] = -60;
-	sleep(time);
-	stopWheels();
+void setLeftWheels(int speed){
+	motor[leftBackWheel] = speed;
+	motor[leftFrontWheel] = speed;
 }
 
-//turns the robot left in place
-void pivotLeft(int time){
-	motor[leftBackWheel] = -60;
-	motor[leftFrontWheel] = -60;
-	motor[rightBackWheel] = 60;
-	motor[rightFrontWheel] = 60;
-	sleep(time);
-	stopWheels();
+void setRightWheels(int speed){
+	motor[rightBackWheel] = speed;
+	motor[rightFrontWheel] = speed;
 }
 
-//turns the robot left in place
-void pivotRight(int time){
-	motor[leftBackWheel] = 60;
-	motor[leftFrontWheel] = 60;
-	motor[rightBackWheel] = -60;
-	motor[rightFrontWheel] = -60;
-	sleep(time);
-	stopWheels();
+void moveForward(float ticks,int leftSpeed,int rightSpeed){
+	resetMotorEncoder(rightBackWheel);
+	setLeftWheels(leftSpeed);
+	setRightWheels(rightSpeed);
+	waitUntil(getMotorEncoder(rightBackWheel) >= ticks);
+	setWheelSpeed(0);
 }
 
-//turns left in a circular motion
-void carTurnLeft(int time){
-	motor[rightBackWheel] = 60;
-	motor[rightFrontWheel] = 60;
-	sleep(time);
-	stopWheels();
-}
-
-//turns right in a circular motion
-void carTurnRight(int time){
-	motor[rightBackWheel] = 60;
-	motor[rightFrontWheel] = 60;
-	sleep(time);
-	stopWheels();
+void moveBackward(float ticks,int leftSpeed,int rightSpeed){
+	resetMotorEncoder(rightBackWheel);
+	setLeftWheels(leftSpeed);
+	setRightWheels(rightSpeed);
+	waitUntil(getMotorEncoder(rightBackWheel) <= -(ticks));
+	setWheelSpeed(0);
 }
 
 //turn on conveyor belt
 void setConveyorSpeed(int speed){
 	motor[conveyor] = speed;
-	motor[intake] = speed;
 }
 
-//if we start farther away from the poles while on the red team
-void fartherRed(){
-}
-
-//if we start farther away from the poles while on the blue team
-void fartherBlue(){
-}
-
-//if starting closer to the poles while on the red team
-void closerRed(){
-	carTurnLeft(500);
-	pivotLeft(1000);
-	stopWheels();
+void autonomousLeft(){
+	//******** SHOOT BALL ********
+	//launch ball
 	launchOn();
-	sleep(3000);
-	setConveyorSpeed(80);
-	sleep(1500);
+	//wait 1 second
+	sleep(1000);
+	//move up conveyor belt
+	setConveyorSpeed(-50);
+	sleep(2500);
+	//stop launcher and conveyor belt
+	setLauncherSpeed(0);
 	setConveyorSpeed(0);
-	setLauncherSpeed(0);
-	moveForward(3000);
-	moveBackward(3000);
-	pivotRight(1000);
-	moveForward(2000);
+
+	//******** MOVE FORWARD ********
+	//move forward 1.5 tiles and stop
+	moveForward(2100,60,60);
+
+	//******** MOVE BACKWARD ********
+	//move backward 24 inches and stop
+	moveBackward(2100,-60,-60);
 }
 
-//if starting closer to the poles while on the blue team
-void closerBlue(){
+void autonomousRight(){
+	//******** SHOOT BALL ********
+	//launch ball
 	launchOn();
+	//wait 1 second
 	sleep(1000);
-	setConveyorSpeed(-80);
-	sleep(1000);
-	//setConveyorSpeed(0);
+	//move up conveyor belt
+	setConveyorSpeed(-50);
+	sleep(2500);
+	//stop launcher and conveyor belt
 	setLauncherSpeed(0);
-	pivotLeft(15);
-	moveForward(2000);
-	//moveBackward(2000);
-	//pivotLeft(1200);
-	//moveForward(3000);
+	setConveyorSpeed(0);
+
+	//******** MOVE FORWARD ********
+	//move forward 1.5 tiles and stop
+	moveForward(2100,80,60);
+
+	//******** MOVE BACKWARD ********
+	//move backward 24 inches and stop
+	moveBackward(2100,-80,-60);
 }
 
 task autonomous()
 {
-	closerBlue();
-//  if(red){
-//  	if(sonarDist>24){
-//  		closerRed();
-//  	} else{
-//  		fartherRed();
-//  	}
-//  } else{
-//  	if(sonarDist>24){
-//  		closerBlue();
-//  	} else{
-//  		fartherBlue();
-//  	}
-//	}
+	autonomousRight();
 }
 
 
@@ -234,10 +193,6 @@ task autonomous()
 //************************************
 //**********     WHEELS     **********
 //************************************
-
-bool launcherOn = false;
-bool intakeOff = true;
-int MAX = 127;
 
 //https://www.desmos.com/calculator/xv2hbpabjm
 int modJoystick(int input){
@@ -259,80 +214,23 @@ task updateWheels(){
 //**********    LAUNCHER    **********
 //************************************
 
-
-//gradual 37-67-97-127
-//takes 124ms
-void accLauncherJess(){
-	//once speed reaches 127 leaves loop and stays
-	for(int speed = 37; speed <= 127; speed += 30){
-		setLauncherSpeed(speed);
-		sleep(31);
-	}
-}
-
-//61-84-105-127
-//starts larger, smaller increments
-//speed = 22x+61 from
-//should take 100ms
-void accLauncherCait(){
-	for(int x = 0; x <= 3; x++){
-		setLauncherSpeed(22*x+61);
-		//wait 25 milliseconds
-		sleep(25);
-	}
-}
-
-//exponentially increases the launcher speed
-//caitlin obrien
-//speed = (e^x)-1 from x= 3.1 to x = 5.1
-//should take 100ms
-void accLauncherExp(){
-	for(float x = 3.1; x <= 5.1; x+=.4){
-		setLauncherSpeed(exp(x)-1);
-		//waits 20 milliseconds
-		sleep(20);
-	}
-}
-
 void launcherNiko(){
-	while(motor[launcherLB]!=MAX){
+	while(motor[launcherLB]!=127){
 		motor[launcherLB]+=10;
 		motor[launcherLT]+=10;
 		motor[launcherRB]+=10;
 		motor[launcherRT]+=10;
-
 	}
 }
 
 // Press 8U for Jess's, 8R for Cait's, 8D for Exponential
 task updateLauncher(){
-		// If 8U pressed, do Jess's launcher & wait for the button to be released
+		// If 8U pressed, do Niko's launcher & wait for the button to be released
 		if (vexRT[Btn5U] == 1){
-			//if(launcherOn){
-				//launcherOn = false;
-				//setLauncherSpeed(0);
-			//} else{
-				//launcherOn = true;
 				launcherNiko();
-			//}
-
-		// If 8R is pressed, do Cait's launcher & wait for the button to be released
-		//} else if (vexRT[Btn8R] == 1){
-			//accLauncherCait();
-			//waitUntil(vexRT[Btn8R] == 0);
-
-		// If 8D is pressed, do Cait's launcher & wait for the button to be released
 		} else if (vexRT[Btn5D] == 1){
 			setLauncherSpeed(0);
-			//accLauncherExp();
-			//waitUntil(vexRT[Btn8D] == 0);
 		}
-
-		// Otherwise make sure launcher speed is 0
-		//} else {
-		//	setLauncherSpeed(0);
-		//	sleep(10);
-		//}
 }
 
 
@@ -340,49 +238,18 @@ task updateLauncher(){
 //**********     INTAKE     **********
 //************************************
 
-//bool intakeOff = true;
-
 task updateIntake(){
-
 		// Check if button is pressed
 		if (vexRT[Btn6U] == 1){
-			//if (intakeOff) {
-				// Turn intake on
-				//intakeOff = false;
-
 				motor[intake] = -60;
 				motor[conveyor] = 60;
-
-			//} else{
-				//intakeOff = true;
-				//motor[intake] = 0;
-				//motor[conveyor] = 0;
-			//}
 		} else if (vexRT[Btn6D] == 1){
-			//if(intakeOff) {
-				//intakeOff = false;
 				motor[intake] = 60;
 				motor[conveyor] = -60;
-			//} else{
-				//intakeOff = true;
-				//motor[intake] = 0;
-				//motor[conveyor] = 0;
-			//}
 		} else {
-				// Turn intake off
-				//intakeOff = true;
-
 				motor[intake] = 0;
 				motor[conveyor] = 0;
-
-			}
-
-			// Wait for button to be released
-			//waitUntil(vexRT[Btn7L] == 0);
-		//}
-
-		// Sleep so that it's not a "hotloop"
-		//sleep(10);
+		}
 }
 
 task updateDisplay(){
@@ -416,16 +283,10 @@ task updateDisplay(){
 
 task usercontrol()
 {
-	clearLCDLine(0);    				// Clear line 1 (0) of the LCD
-	clearLCDLine(1);
-	displayLCDString(0,0,"UWU");
-
   while (true)
   {
-		//startTask( updateDisplay );
     startTask( updateWheels );
 		startTask( updateLauncher );
 		startTask( updateIntake );
   }
-
 }
