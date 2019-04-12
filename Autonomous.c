@@ -61,23 +61,31 @@ int getDistance(float tiles){
 	return 392*(24*tiles)/(4*PI);
 }
 
-void moveForward(float tiles,int leftSpeed,int rightSpeed){
+void moveForward(float ticks,int leftSpeed,int rightSpeed){
 	resetMotorEncoder(rightBackWheel);
 	setLeftWheels(leftSpeed);
 	setRightWheels(rightSpeed);
-	waitUntil(getMotorEncoder(rightBackWheel) >= 2100);
+	waitUntil(getMotorEncoder(rightBackWheel) >= ticks);
 	setWheelSpeed(0);
 }
 
-void moveBackward(float tiles,int leftSpeed,int rightSpeed){
+void moveBackward(float ticks,int leftSpeed,int rightSpeed){
 	resetMotorEncoder(rightBackWheel);
 	setLeftWheels(leftSpeed);
 	setRightWheels(rightSpeed);
-	waitUntil(getMotorEncoder(rightBackWheel) <= -2100);
+	waitUntil(getMotorEncoder(rightBackWheel) <= -(ticks));
 	setWheelSpeed(0);
 }
 
-void autonomousLauncher(){
+void rightTurn(float ticks,int leftSpeed,int rightSpeed){
+	resetMotorEncoder(rightBackWheel);
+	setLeftWheels(-leftSpeed);
+	setRightWheels(rightSpeed);
+	waitUntil(getMotorEncoder(rightBackWheel) >= ticks);
+	setWheelSpeed(0);
+}
+
+void autonomousLeft(){
 	//******** SHOOT BALL ********
 	//launch ball
 	launchOn();
@@ -92,23 +100,48 @@ void autonomousLauncher(){
 
 	//******** MOVE FORWARD ********
 	//move forward 1.5 tiles and stop
-	moveForward(1.5,60,60);
+	moveForward(2100,60,60);
 
 	//******** MOVE BACKWARD ********
 	//move backward 24 inches and stop
-	moveBackward(1.5,-60,-60);
+	moveBackward(2100,-60,-60);
 }
 
-void turnRightAndPark(){
+void autonomousRight(){
+	//******** SHOOT BALL ********
+	//launch ball
+	launchOn();
+	//wait 1 second
+	sleep(1000);
+	//move up conveyor belt
+	setConveyorSpeed(-50);
+	sleep(2500);
+	//stop launcher and conveyor belt
+	setLauncherSpeed(0);
+	setConveyorSpeed(0);
+
+	//******** MOVE FORWARD ********
+	//move forward 1.5 tiles and stop
+	moveForward(2100,80,60);
+
+	//******** MOVE BACKWARD ********
+	//move backward 24 inches and stop
+	moveBackward(2100,-80,-60);
+}
+
+void turnAndParkLeft(){
+	//******** MOVE FORWARD ********
+	//move forward one tile and stop
+	moveForward(2, 60, 60);
+
 	//******** TURN ********
-	//turn toward parking
-		//if next to the left wall, turn right
-		//if next to the right wall, turn left
-	//stop wheels
+	//turn toward parking and stop wheels
+	rightTurn(10, 60, 60);
 
 	//******** GO UP PARKING SPACE ********
-	//move forward onto parking space
-	//stop wheels
+	//move forward onto parking space and stop wheels
+	//moveForward(2100, 60, 60);
+	moveForward(1, 60, 60);
 }
 
 void display(){
@@ -131,5 +164,5 @@ task main()
 	//if not next to any walls
 	waitUntil(vexRT[Btn8R]==1);
 	display();
-	autonomousLauncher();
+	autonomousRight();
 }
