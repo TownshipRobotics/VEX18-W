@@ -1,7 +1,7 @@
 #pragma config(I2C_Usage, I2C1, i2cSensors)
 #pragma config(Sensor, dgtl1,  sonarDist,      sensorSONAR_inch)
 #pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
-#pragma config(UART_Usage, UART2, uartVEXLCD, baudRate19200, IOPins, None, None)
+#pragma config(UART_Usage, UART1, uartVEXLCD, baudRate19200, IOPins, None, None)
 #pragma config(Motor,  port1,           intake,        tmotorVex393_HBridge, openLoop)
 #pragma config(Motor,  port2,           launcherLB,    tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port3,           launcherLT,    tmotorVex393_MC29, openLoop)
