@@ -175,7 +175,7 @@ void autonomousRight(){
 
 task autonomous()
 {
-	autonomousRight();
+	autonomousLeft();
 }
 
 
